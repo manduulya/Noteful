@@ -1,12 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
+import { parseISO } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
 import config from '../config'
+import ErrorBox from '../ErrorBox/ErrorBox'
 import './Note.css'
 
 export default class Note extends React.Component {
+  state = {
+    error: null
+  }
+
   static defaultProps ={
     onDeleteNote: () => {},
   }
@@ -31,9 +36,10 @@ export default class Note extends React.Component {
         this.context.deleteNote(noteId)
         // allow parent to perform extra behaviour
         this.props.onDeleteNote(noteId)
+        this.setState({error:null})
       })
       .catch(error => {
-        console.error({ error })
+        this.setState({error:error.message})
       })
   }
 
@@ -41,6 +47,7 @@ export default class Note extends React.Component {
     const { name, id, modified } = this.props
     return (
       <div className='Note'>
+        {this.state.error && <ErrorBox message={this.state.error}/>} 
         <h2 className='Note__title'>
           <Link to={`/note/${id}`}>
             {name}
@@ -60,7 +67,7 @@ export default class Note extends React.Component {
             Modified
             {' '}
             <span className='Date'>
-              {format(modified, 'Do MMM YYYY')}
+              {parseISO(modified, 'Do MMM YYYY').toString()}
             </span>
           </div>
         </div>

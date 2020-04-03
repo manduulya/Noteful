@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import NotefulForm from '../NotefulForm/NotefulForm'
 import ApiContext from '../ApiContext'
 import config from '../config'
+import ErrorBox from '../ErrorBox/ErrorBox'
 import './AddFolder.css'
+import PropTypes from 'prop-types'
 
 export default class AddFolder extends Component {
   static defaultProps = {
@@ -12,10 +14,25 @@ export default class AddFolder extends Component {
   }
   static contextType = ApiContext;
 
+  state = {
+    error: null
+  }
+
+  validate(folder){
+    if(folder.name.length < 3)
+      return 'Folder name has to have at least 3 characters'
+    return null
+  }
+
   handleSubmit = e => {
     e.preventDefault()
     const folder = {
-      name: e.target['folder-name'].value
+      name: e.target['folder-name'].value.trim()
+    }
+    let validationError = this.validate(folder)
+      if(validationError){
+        this.setState({error:validationError})
+        return
     }
     fetch(`${config.API_ENDPOINT}/folders`, {
       method: 'POST',
@@ -34,7 +51,7 @@ export default class AddFolder extends Component {
         this.props.history.push(`/folder/${folder.id}`)
       })
       .catch(error => {
-        console.error({ error })
+        this.setState({error:error.message})
       })
   }
 
@@ -42,6 +59,7 @@ export default class AddFolder extends Component {
     return (
       <section className='AddFolder'>
         <h2>Create a folder</h2>
+        {this.state.error && <ErrorBox message={this.state.error}/>}
         <NotefulForm onSubmit={this.handleSubmit}>
           <div className='field'>
             <label htmlFor='folder-name-input'>
@@ -58,4 +76,8 @@ export default class AddFolder extends Component {
       </section>
     )
   }
+}
+
+AddFolder.propTypes = {
+  value: PropTypes.string
 }

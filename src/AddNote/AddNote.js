@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import NotefulForm from '../NotefulForm/NotefulForm'
 import ApiContext from '../ApiContext'
 import config from '../config'
+import ErrorBox from '../ErrorBox/ErrorBox'
+import PropTypes from 'prop-types'
 import './AddNote.css'
 
 export default class AddNote extends Component {
@@ -12,14 +14,32 @@ export default class AddNote extends Component {
   }
   static contextType = ApiContext;
 
+  state = {
+    error: null
+  }
+
+  validate(note){
+    if(note.name.length === 0 ){
+      return 'Please enter note name'
+    }else if(note.content.length === 0){
+      return 'Please enter a content'
+    }
+    return null
+  }
+
   handleSubmit = e => {
     e.preventDefault()
     const newNote = {
-      name: e.target['note-name'].value,
-      content: e.target['note-content'].value,
-      folderId: e.target['note-folder-id'].value,
+      name: e.target['note-name'].value.trim(),
+      content: e.target['note-content'].value.trim(),
+      folderId: e.target['note-folder-id'].value.trim(),
       modified: new Date(),
     }
+    let validationError = this.validate(newNote)
+      if(validationError){
+        this.setState({error:validationError})
+        return
+      }
     fetch(`${config.API_ENDPOINT}/notes`, {
       method: 'POST',
       headers: {
@@ -37,7 +57,7 @@ export default class AddNote extends Component {
         this.props.history.push(`/folder/${note.folderId}`)
       })
       .catch(error => {
-        console.error({ error })
+        this.setState({error: error.message})
       })
   }
 
@@ -46,6 +66,7 @@ export default class AddNote extends Component {
     return (
       <section className='AddNote'>
         <h2>Create a note</h2>
+        {this.state.error && <ErrorBox message={this.state.error}/>}
         <NotefulForm onSubmit={this.handleSubmit}>
           <div className='field'>
             <label htmlFor='note-name-input'>
@@ -63,8 +84,8 @@ export default class AddNote extends Component {
             <label htmlFor='note-folder-select'>
               Folder
             </label>
-            <select id='note-folder-select' name='note-folder-id'>
-              <option value={null}>...</option>
+            <select id='note-folder-select' name='note-folder-id' required>
+              <option value={''}>...</option>
               {folders.map(folder =>
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
@@ -81,4 +102,8 @@ export default class AddNote extends Component {
       </section>
     )
   }
+}
+
+AddNote.propTypes = {
+  name: PropTypes.string
 }
