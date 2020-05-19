@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddNote component renders the complete form 1`] = `
+<section
+  className="AddNote"
+>
+  <h2>
+    Create a note
+  </h2>
+  <NotefulForm
+    onSubmit={[Function]}
+  >
+    <div
+      className="field"
+    >
+      <label
+        htmlFor="note-name-input"
+      >
+        Name
+      </label>
+      <input
+        id="note-name-input"
+        name="noteName"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="field"
+    >
+      <label
+        htmlFor="note-content-input"
+      >
+        Content
+      </label>
+      <textarea
+        id="note-content-input"
+        name="noteContent"
+        onChange={[Function]}
+      />
+    </div>
+    <div
+      className="field"
+    >
+      <label
+        htmlFor="note-folder-select"
+      >
+        Folder
+      </label>
+      <select
+        id="note-folder-select"
+        name="folder_id"
+        onChange={[Function]}
+        required={true}
+        value=""
+      >
+        <option
+          value=""
+        >
+          ...
+        </option>
+      </select>
+    </div>
+    <div
+      className="buttons"
+    >
+      <button
+        type="submit"
+      >
+        Add note
+      </button>
+    </div>
+  </NotefulForm>
+</section>
+`;

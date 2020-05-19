@@ -126,7 +126,7 @@ export default class AddNote extends Component {
               name="folder_id"
               required
               onChange={this.handleChange}
-              value={this.state.folder_id}
+              value={this.state.folder_id.toString()}
             >
               <option value={""}>...</option>
               {folders.map((folder) => (

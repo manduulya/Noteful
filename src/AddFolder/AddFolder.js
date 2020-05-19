@@ -38,7 +38,7 @@ export default class AddFolder extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.folderName);
+
     const folder = {
       name: e.target["folderName"].value.trim(),
     };

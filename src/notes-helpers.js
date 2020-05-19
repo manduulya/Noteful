@@ -1,15 +1,17 @@
+export const findFolder = (folders = [], folderId) => {
+  if (!folderId) return;
+  return folders.find((folder) => folder.id.toString() === folderId.toString());
+};
 
-export const findFolder = (folders=[], folderId) =>
-folders.find(folder => folder.id === folderId)
+export const findNote = (notes = [], noteId) => {
+  if (!noteId) return;
+  return notes.find((note) => note.id.toString() === noteId.toString());
+};
 
-export const findNote = (notes=[], noteId) =>
-notes.find(note => note.id === noteId)
+export const getNotesForFolder = (notes = [], folderId) =>
+  !folderId
+    ? notes
+    : notes.filter((note) => note.folderId.toString() === folderId.toString());
 
-export const getNotesForFolder = (notes=[], folderId) => (
-(!folderId)
-  ? notes
-  : notes.filter(note => note.folderId === folderId)
-)
-
-export const countNotesForFolder = (notes=[], folderId) =>
-notes.filter(note => note.folderId === folderId).length
+export const countNotesForFolder = (notes = [], folderId) =>
+  notes.filter((note) => note.folderId === folderId).length;

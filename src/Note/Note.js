@@ -34,7 +34,7 @@ export default class Note extends React.Component {
       .then(() => {
         this.context.deleteNote(noteId);
         // allow parent to perform extra behaviour
-        this.props.onDeleteNote(noteId);
+        this.props.onDeleteNote();
         this.setState({ error: null });
       })
       .catch((error) => {
@@ -48,7 +48,7 @@ export default class Note extends React.Component {
       <div className="Note">
         {this.state.error && <ErrorBox message={this.state.error} />}
         <h2 className="Note__title">
-          <Link to={`/note/${id}`}>{name}</Link>
+          <Link to={{ pathname: `/note/${id}` }}>{name}</Link>
         </h2>
         <button
           className="Note__delete"
