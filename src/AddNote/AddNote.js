@@ -17,17 +17,6 @@ export default class AddNote extends Component {
     this.handleChange = this.handleChange.bind();
   }
 
-  // static contextType = ApiContext;
-  // state = {
-  //   noteName: "",
-  //   contName: "",
-  //   folder_id: "",
-  // };
-  // static defaultProps = {
-  //   history: {
-  //     push: () => {},
-  //   },
-  // };
   static contextType = ApiContext;
 
   state = {
@@ -51,23 +40,6 @@ export default class AddNote extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      name: this.state.noteName,
-      content: this.state.noteContent,
-      folder_id: this.state.folder_id,
-      modified: new Date(),
-    });
-    // const newNote = {
-    //   name: e.target["noteName"].value.trim(),
-    //   content: e.target["noteContent"].value.trim(),
-    //   folderId: e.target["folder_id"].value.trim(),
-    //   modified: new Date(),
-    // };
-    // let validationError = this.validate(newNote);
-    // if (validationError) {
-    //   this.setState({ error: validationError });
-    //   return;
-    // }
     fetch(`${config.API_ENDPOINT}/api/notes`, {
       method: "POST",
       headers: {
@@ -86,7 +58,7 @@ export default class AddNote extends Component {
       })
       .then((note) => {
         this.context.addNote(note);
-        this.props.history.push(`/notes/${note.note.id}`);
+        this.props.history.push(`/`);
       })
       .catch((error) => {
         this.setState({ error: error.message });
